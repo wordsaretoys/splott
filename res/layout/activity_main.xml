@@ -1,7 +1,93 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.wordsaretoys.splott.MainActivity"
-    tools:ignore="MergeRootFrame" />
+    tools:context="com.wordsaretoys.splott.MainActivity">
+
+    <EditText
+        android:id="@+id/equation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="8dp"
+        android:inputType="text"/>
+    
+    <Button
+        android:id="@+id/compile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/equation"
+        android:layout_centerHorizontal="true"
+        android:text="@string/compile"/>
+    
+    <View
+        android:id="@+id/spacer1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_below="@id/compile"/>
+    
+    <EditText
+        android:id="@+id/inputX"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spacer1"
+        android:layout_margin="8dp"
+        android:inputType="text"
+        android:text="@string/zero"/>
+
+    <EditText
+        android:id="@+id/inputY"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/inputX"
+        android:layout_margin="8dp"
+        android:inputType="text"
+        android:text="@string/zero"/>
+
+    <EditText
+        android:id="@+id/inputZ"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/inputY"
+        android:layout_margin="8dp"
+        android:inputType="text"
+        android:text="@string/zero"/>
+    
+    <EditText
+        android:id="@+id/inputT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/inputZ"
+        android:layout_margin="8dp"
+        android:inputType="text"
+        android:text="@string/zero"/>
+    
+    <Button
+        android:id="@+id/run"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/inputT"
+        android:layout_centerHorizontal="true"
+        android:text="@string/run"/>
+    
+    <View
+        android:id="@+id/spacer2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_below="@id/run"/>
+    
+    <TextView
+        android:id="@+id/answer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spacer2"
+        android:layout_margin="8dp"/>
+    
+</RelativeLayout>

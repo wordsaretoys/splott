@@ -1,5 +1,8 @@
 package com.wordsaretoys.splott;
 
+import java.io.File;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -9,6 +12,15 @@ import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
+import android.content.Context;
+
+import com.google.dexmaker.BinaryOp;
+import com.google.dexmaker.Code;
+import com.google.dexmaker.DexMaker;
+import com.google.dexmaker.Local;
+import com.google.dexmaker.MethodId;
+import com.google.dexmaker.TypeId;
+import com.google.dexmaker.UnaryOp;
 import com.wordsaretoys.splott.parser.SurfaceBaseListener;
 import com.wordsaretoys.splott.parser.SurfaceLexer;
 import com.wordsaretoys.splott.parser.SurfaceParser;
@@ -16,7 +28,7 @@ import com.wordsaretoys.splott.parser.SurfaceParser;
 public class Compiler {
 
 	enum StepType {
-		LoadConstant, ReturnValue,
+		LoadConstant,
 		OpAdd, OpSubtract, OpMultiply, OpDivide, OpExponent, OpUminus,
 		FuncSine, FuncCosine, FuncLogarithm, FuncExponential
 	}
@@ -74,10 +86,6 @@ public class Compiler {
 			
 		}
 	}
-	
-	ArrayList<Step> steps;
-	Stack<Integer> stack;
-	int local;
 	
 	class Listener extends SurfaceBaseListener {
 
@@ -171,22 +179,50 @@ public class Compiler {
 		}
 		
 	}
+
+	DexMaker dexMaker = new DexMaker();
+	ArrayList<Step> steps;
+	Stack<Integer> stack;
+	int local;
+	int output;
 	
-	public void compile(String eq) {
+	Context context;
+
+	public Compiler(Context c) {
+        steps = new ArrayList<Step>();
+        stack = new Stack<Integer>();
+        context = c;
+        
+        // TODO: clean out jar files??
+	}
+	
+	public Method compile(String eq) {
+		parse(eq);
+		//debug();
+		return translate();
+	}
+	
+	void parse(String eq) {
+        // generate the parse tree 
         ANTLRInputStream input = new ANTLRInputStream(eq);
         SurfaceLexer lexer = new SurfaceLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         SurfaceParser parser = new SurfaceParser(tokens);
         ParseTree tree = parser.surface();
-        
-        ParseTreeWalker walker = new ParseTreeWalker();
 
-        steps = new ArrayList<Step>();
-        stack = new Stack<Integer>();
+        // reset our structures
+        steps.clear();
+        stack.clear();
         local = VarT + 1;
-        
+
+        // walking the parse tree generates the steps
+        ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(new Listener(), tree);
-        
+        // the return index is the last thing on the stack
+        output = stack.pop();
+	}
+
+	void debug() {
         for (int i = 0; i < steps.size(); i++) {
         	Step s = steps.get(i);
         	switch(s.type) {
@@ -208,11 +244,123 @@ public class Compiler {
         	
         	}
         }
-        
-        // last index on the stack is return value
-        int l = stack.pop();
-        System.out.println("RET " + l);
-		
+        System.out.println("RET " + output);
 	}
+	
+	Method translate() {
+		dexMaker = new DexMaker();
+		// identify and declare a containing class
+		TypeId<?> surfaceEq = TypeId.get("LSurfaceEq;");
+		dexMaker.declare(surfaceEq, "SurfaceEq.generated", Modifier.PUBLIC, TypeId.OBJECT);
+		
+		// lookup system types we may need
+		TypeId<Math> mathType = TypeId.get(Math.class);
+		
+		// identify and declare a surface equation method
+		// it has the form: public static double get(double, double, double, double);
+		@SuppressWarnings("rawtypes")
+		MethodId get = surfaceEq.getMethod(TypeId.DOUBLE, "get", 
+				TypeId.DOUBLE, TypeId.DOUBLE, TypeId.DOUBLE, TypeId.DOUBLE);
+		Code code = dexMaker.declare(get, Modifier.STATIC | Modifier.PUBLIC);
+		
+		// allocate and declare all the locals we'll need
+		ArrayList<Local<Double>> l = new ArrayList<Local<Double>>();
+		// first four are the (x, y, z, t) parameters
+		for (int i = 0; i < 4; i++) {
+			l.add(code.getParameter(i, TypeId.DOUBLE));
+		}
+		// remainder are scratch vars
+		for (int i = 4; i < local; i++) {
+			l.add(code.newLocal(TypeId.DOUBLE));
+		}
+		
+		// run through the steps and generate code
+		for (int i = 0; i < steps.size(); i++) {
+			
+			Step step = steps.get(i);
+			switch (step.type) {
 
+			case LoadConstant:
+				
+				code.loadConstant(l.get(step.local0), step.constant);
+				break;
+				
+			case OpAdd:
+				
+				code.op(BinaryOp.ADD, l.get(step.local2), 
+						l.get(step.local0), l.get(step.local1));
+				break;
+				
+			case OpSubtract:
+				
+				code.op(BinaryOp.SUBTRACT, l.get(step.local2), 
+						l.get(step.local0), l.get(step.local1));
+				break;
+
+			case OpMultiply:
+				
+				code.op(BinaryOp.MULTIPLY, l.get(step.local2), 
+						l.get(step.local0), l.get(step.local1));
+				break;
+
+			case OpDivide:
+				
+				code.op(BinaryOp.DIVIDE, l.get(step.local2), 
+						l.get(step.local0), l.get(step.local1));
+				break;
+
+			case OpExponent:
+
+				MethodId<Math, Double> pow = 
+					mathType.getMethod(TypeId.DOUBLE, "pow", TypeId.DOUBLE, TypeId.DOUBLE);
+				code.invokeStatic(pow, l.get(step.local2), l.get(step.local0), l.get(step.local1));
+				break;
+				
+			case OpUminus:
+				
+				code.op(UnaryOp.NEGATE, l.get(step.local1), l.get(step.local0));
+				break;
+				
+			case FuncSine:
+				
+				MethodId<Math, Double> sin = mathType.getMethod(TypeId.DOUBLE, "sin", TypeId.DOUBLE);
+				code.invokeStatic(sin, l.get(step.local1), l.get(step.local0));
+				break;
+			
+			case FuncCosine:
+				
+				MethodId<Math, Double> cos = mathType.getMethod(TypeId.DOUBLE, "cos", TypeId.DOUBLE);
+				code.invokeStatic(cos, l.get(step.local1), l.get(step.local0));
+				break;
+
+			case FuncLogarithm:
+
+				MethodId<Math, Double> log = mathType.getMethod(TypeId.DOUBLE, "log", TypeId.DOUBLE);
+				code.invokeStatic(log, l.get(step.local1), l.get(step.local0));
+				break;
+				
+			case FuncExponential:
+				
+				MethodId<Math, Double> exp = mathType.getMethod(TypeId.DOUBLE, "exp", TypeId.DOUBLE);
+				code.invokeStatic(exp, l.get(step.local1), l.get(step.local0));
+				break;
+			}
+		}
+		
+		// return the last value
+		code.returnValue(l.get(output));
+
+		// create the dex file and load it
+		try {
+			File outputDir = context.getCacheDir();
+			ClassLoader loader = dexMaker.generateAndLoad(Compiler.class.getClassLoader(), outputDir);
+			Class<?> surfaceEqClass = loader.loadClass("SurfaceEq");
+			// return the method on success
+			return surfaceEqClass.getMethod("get", double.class, double.class, double.class, double.class);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 }
