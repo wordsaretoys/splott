@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:orientation="vertical" >
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        
+        <TextView
+            android:id="@+id/key_7"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/key_bk"
+            android:textColor="@color/white"
+            android:textSize="@dimen/key_text_size"
+            android:text="@string/key_7"/>
+
+        <TextView
+            android:id="@+id/key_8"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/key_bk"
+            android:textColor="@color/white"
+            android:textSize="@dimen/key_text_size"
+            android:text="@string/key_8"/>
+        
+        <TextView
+            android:id="@+id/key_9"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/key_bk"
+            android:textColor="@color/white"
+            android:textSize="@dimen/key_text_size"
+            android:text="@string/key_9"/>
+        
+        <TextView
+            android:id="@+id/key_div"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/key_bk"
+            android:textColor="@color/white"
+            android:textSize="@dimen/key_text_size"
+            android:text="@string/key_div"/>
+        
+        <TextView
+            android:id="@+id/key_lpr"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/key_bk"
+            android:textColor="@color/white"
+            android:textSize="@dimen/key_text_size"
+            android:text="@string/key_lpr"/>
+        
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        
+        <TextView
+            android:id="@+id/key_4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/key_bk"
+            android:textColor="@color/white"
+            android:textSize="@dimen/key_text_size"
+            android:text="@string/key_4"/>
+
+        <TextView
+            android:id="@+id/key_5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/key_bk"
+            android:textColor="@color/white"
+            android:textSize="@dimen/key_text_size"
+            android:text="@string/key_5"/>
+        
+        <TextView
+            android:id="@+id/key_6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/key_bk"
+            android:textColor="@color/white"
+            android:textSize="@dimen/key_text_size"
+            android:text="@string/key_6"/>
+        
+        <TextView
+            android:id="@+id/key_mul"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/key_bk"
+            android:textColor="@color/white"
+            android:textSize="@dimen/key_text_size"
+            android:text="@string/key_mul"/>
+        
+        <TextView
+            android:id="@+id/key_rpr"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/key_bk"
+            android:textColor="@color/white"
+            android:textSize="@dimen/key_text_size"
+            android:text="@string/key_rpr"/>
+        
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        
+        <TextView
+            android:id="@+id/key_1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/key_bk"
+            android:textColor="@color/white"
+            android:textSize="@dimen/key_text_size"
+            android:text="@string/key_1"/>
+
+        <TextView
+            android:id="@+id/key_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/key_bk"
+            android:textColor="@color/white"
+            android:textSize="@dimen/key_text_size"
+            android:text="@string/key_2"/>
+        
+        <TextView
+            android:id="@+id/key_3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/key_bk"
+            android:textColor="@color/white"
+            android:textSize="@dimen/key_text_size"
+            android:text="@string/key_3"/>
+        
+        <TextView
+            android:id="@+id/key_sub"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/key_bk"
+            android:textColor="@color/white"
+            android:textSize="@dimen/key_text_size"
+            android:text="@string/key_sub"/>
+        
+        <TextView
+            android:id="@+id/key_equ"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/key_bk"
+            android:textColor="@color/white"
+            android:textSize="@dimen/key_text_size"
+            android:text="@string/key_equ"/>
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        
+        <TextView
+            android:id="@+id/key_0"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:background="@drawable/key_bk"
+            android:textColor="@color/white"
+            android:textSize="@dimen/key_text_size"
+            android:text="@string/key_0"/>
+
+        <TextView
+            android:id="@+id/key_dpt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/key_bk"
+            android:textColor="@color/white"
+            android:textSize="@dimen/key_text_size"
+            android:text="@string/key_dpt"/>
+        
+        <TextView
+            android:id="@+id/key_add"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/key_bk"
+            android:textColor="@color/white"
+            android:textSize="@dimen/key_text_size"
+            android:text="@string/key_add"/>
+        
+        <TextView
+            android:id="@+id/key_pow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/key_bk"
+            android:textColor="@color/white"
+            android:textSize="@dimen/key_text_size"
+            android:text="@string/key_pow"/>
+        
+    </LinearLayout>
+    
+</LinearLayout>

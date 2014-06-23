@@ -8,4 +8,35 @@
     
     <string name="zero">0</string>
    
+    <string name="key_0">0</string>
+    <string name="key_1">1</string>
+    <string name="key_2">2</string>
+    <string name="key_3">3</string>
+    <string name="key_4">4</string>
+    <string name="key_5">5</string>
+    <string name="key_6">6</string>
+    <string name="key_7">7</string>
+    <string name="key_8">8</string>
+    <string name="key_9">9</string>
+
+    <string name="key_dpt">.</string>
+    <string name="key_div">\u00f7</string>
+    <string name="key_mul">\u00d7</string>
+    <string name="key_add">+</string>
+    <string name="key_sub">-</string>
+    <string name="key_lpr">(</string>
+    <string name="key_rpr">)</string>
+    <string name="key_pow">^</string>
+    <string name="key_equ">=</string>
+    
+    <string name="key_x">x</string>
+    <string name="key_y">y</string>
+    <string name="key_z">z</string>
+    <string name="key_t">t</string>
+    
+    <string name="key_sin">sin</string>
+    <string name="key_cos">cos</string>
+    <string name="key_log">log</string>
+    <string name="key_exp">exp</string>
+    
 </resources>

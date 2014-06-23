@@ -4,4 +4,10 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+	<!-- group background padding -->
+	<dimen name="groupPadding">4dp</dimen>	
+    
+	<!-- key text size -->
+	<dimen name="key_text_size">24sp</dimen>
+	
 </resources>

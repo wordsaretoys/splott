@@ -1,4 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#000</color>
+    <color name="transparent">#0000</color>
+    <color name="white">#fff</color>
+    <color name="pressed">#ddd</color>
+    
+    <color name="lt_purple">#5f2e88</color>
+    <color name="dk_purple">#4f2272</color>
+    
+    <color name="lt_gold">#fff4a4</color>
+    <color name="dk_gold">#fec665</color>
+    
+    <color name="lt_red">#a73920</color>
+    <color name="dk_red">#803520</color>
+    
+    <color name="lt_gray">#999</color>
+    <color name="dk_gray">#666</color>
+    
+    <color name="lt_text">#fff</color>
+    <color name="med_text">#fff</color>
+    <color name="dk_text">#000</color>
+    <color name="alt_text">#fff450</color>
+    
+    <color name="lt_green">#788774</color>
+    <color name="dk_green">#3d453e</color>
 </resources>
