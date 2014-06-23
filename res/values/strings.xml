@@ -2,12 +2,8 @@
 <resources>
 
     <string name="app_name">splott</string>
- 
-    <string name="compile">Compile</string>
-    <string name="run">Run</string>
-    
-    <string name="zero">0</string>
-   
+
+    <!-- equation entry key labels -->
     <string name="key_0">0</string>
     <string name="key_1">1</string>
     <string name="key_2">2</string>
@@ -38,5 +34,12 @@
     <string name="key_cos">cos</string>
     <string name="key_log">log</string>
     <string name="key_exp">exp</string>
-    
+
+	<string name="key_del">\u232b</string>
+
+	<!-- tab labels -->
+	<string name="tab_equation">Equation</string>
+	<string name="tab_limits">Limits</string>
+	<string name="tab_surface">Surface</string>
+	
 </resources>

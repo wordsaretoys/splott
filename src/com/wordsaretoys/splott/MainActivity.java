@@ -1,66 +1,112 @@
 package com.wordsaretoys.splott;
 
-import java.lang.reflect.Method;
-
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.app.ActionBar.TabListener;
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
-	Button compileButton, runButton;
-	EditText eqEdit, xEdit, yEdit, zEdit, tEdit;
-	TextView answerText;
 	
-	Compiler compiler;
-	Method getMethod;
+	EquationFragment equationFragment;
+	LimitsFragment limitsFragment;
+	SurfaceFragment surfaceFragment;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		compiler = new Compiler(this);
+		int selectedTab = 0;
 		
-		compileButton = (Button) findViewById(R.id.compile);
-		runButton = (Button) findViewById(R.id.run);
-
-		eqEdit = (EditText) findViewById(R.id.equation);
-		xEdit = (EditText) findViewById(R.id.inputX);
-		yEdit = (EditText) findViewById(R.id.inputY);
-		zEdit = (EditText) findViewById(R.id.inputZ);
-		tEdit = (EditText) findViewById(R.id.inputT);
+		if (savedInstanceState != null) {
+			selectedTab = savedInstanceState.getInt("selectedTab");
+		}
+//		getActionBar().setTitle("???");
 		
-		answerText = (TextView) findViewById(R.id.answer);
+		equationFragment = (EquationFragment) 
+				getFragmentManager().findFragmentById(R.id.equationFragment);
+		limitsFragment = (LimitsFragment) 
+				getFragmentManager().findFragmentById(R.id.limitsFragment);
+		surfaceFragment = (SurfaceFragment)
+				getFragmentManager().findFragmentById(R.id.surfaceFragment);
 		
-		compileButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				String eq = eqEdit.getText().toString();
-				getMethod = compiler.compile(eq);
-			}
-		});
-
-		runButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				try {
-					double x = Double.parseDouble(xEdit.getText().toString());
-					double y = Double.parseDouble(yEdit.getText().toString());
-					double z = Double.parseDouble(zEdit.getText().toString());
-					double t = Double.parseDouble(tEdit.getText().toString());
-					Object o = getMethod.invoke(null, x, y, z, t);
-					answerText.setText(o.toString());
-				} catch (Exception e) {
-					e.printStackTrace();
+		// create the action bar tabs
+		Tab equationTab = getActionBar().newTab()
+			.setText(R.string.tab_equation)
+			.setTabListener(new TabListener() {
+				@Override
+				public void onTabSelected(Tab tab, FragmentTransaction ft) {
+					ft.show(equationFragment);
 				}
+				public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+					ft.hide(equationFragment);
+				}
+				public void onTabReselected(Tab tab, FragmentTransaction ft) {}
 			}
-		});
+		);
+		getActionBar().addTab(equationTab);
+
+		Tab limitsTab = getActionBar().newTab()
+			.setText(R.string.tab_limits)
+			.setTabListener(new TabListener() {
+				@Override
+				public void onTabSelected(Tab tab, FragmentTransaction ft) {
+					ft.show(limitsFragment);
+				}
+				public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+					ft.hide(limitsFragment);
+				}
+				public void onTabReselected(Tab tab, FragmentTransaction ft) {}
+			}
+		);
+		getActionBar().addTab(limitsTab);
+
+		Tab surfaceTab = getActionBar().newTab()
+			.setText(R.string.tab_surface)
+			.setTabListener(new TabListener() {
+				@Override
+				public void onTabSelected(Tab tab, FragmentTransaction ft) {
+					ft.show(surfaceFragment);
+				}
+				public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+					ft.hide(surfaceFragment);
+				}
+				public void onTabReselected(Tab tab, FragmentTransaction ft) {}
+			}
+		);
+		getActionBar().addTab(surfaceTab);
 		
+		getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		getActionBar().setSelectedNavigationItem(selectedTab);
 	}
 
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putInt("selectedTab", 
+			getActionBar().getSelectedTab().getPosition());
+	}
+
+	
+/*
+ 
+	Compiler compiler;
+	Method getMethod;
+	
+	compiler = new Compiler(this);
+
+	String eq = eqEdit.getText().toString();
+	getMethod = compiler.compile(eq);
+	
+	double x = Double.parseDouble(xEdit.getText().toString());
+	double y = Double.parseDouble(yEdit.getText().toString());
+	double z = Double.parseDouble(zEdit.getText().toString());
+	double t = Double.parseDouble(tEdit.getText().toString());
+	Object o = getMethod.invoke(null, x, y, z, t);
+	answerText.setText(o.toString());
+
+ */
 }
