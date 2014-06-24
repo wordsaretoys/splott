@@ -21,7 +21,7 @@ public class SurfaceParser extends Parser {
 		EQU=10, NUMBER=11, WS=12;
 	public static final String[] tokenNames = {
 		"<INVALID>", "')'", "'('", "VARIABLE", "FUNCTION", "'+'", "'-'", "'*'", 
-		"'/'", "'^'", "'='", "NUMBER", "WS"
+		"'/'", "'**'", "'='", "NUMBER", "WS"
 	};
 	public static final int
 		RULE_surface = 0, RULE_expr = 1;

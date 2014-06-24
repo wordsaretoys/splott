@@ -9,13 +9,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:textSize="@dimen/key_text_size"
-        android:inputType="none"/>
+        android:layout_above="@+id/keys"
+        android:padding="4dp"
+        android:background="#32000040"
+        android:textSize="48sp"
+        android:inputType="textMultiLine"
+        android:gravity="top|left"/>
     
     <include
+        android:id="@+id/keys"
         layout="@layout/keys"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="8dp"/>
 
 </RelativeLayout>

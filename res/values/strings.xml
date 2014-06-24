@@ -16,8 +16,8 @@
     <string name="key_9">9</string>
 
     <string name="key_dpt">.</string>
-    <string name="key_div">\u00f7</string>
-    <string name="key_mul">\u00d7</string>
+    <string name="key_div">/</string>
+    <string name="key_mul">*</string>
     <string name="key_add">+</string>
     <string name="key_sub">-</string>
     <string name="key_lpr">(</string>
@@ -35,7 +35,7 @@
     <string name="key_log">log</string>
     <string name="key_exp">exp</string>
 
-	<string name="key_del">\u232b</string>
+	<string name="key_del">\u2190</string>
 
 	<!-- tab labels -->
 	<string name="tab_equation">Equation</string>
