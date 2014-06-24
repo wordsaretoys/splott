@@ -25,6 +25,10 @@ import com.wordsaretoys.splott.parser.SurfaceBaseListener;
 import com.wordsaretoys.splott.parser.SurfaceLexer;
 import com.wordsaretoys.splott.parser.SurfaceParser;
 
+/**
+ * compiles surface equation to f(x, y, z, t) function
+ * note that function is assumed to be syntax-checked!
+ */
 public class Compiler {
 
 	enum StepType {
@@ -203,13 +207,14 @@ public class Compiler {
 	}
 	
 	void parse(String eq) {
-        // generate the parse tree 
+        // generate the parse tree
+		ParseTree tree = null;
         ANTLRInputStream input = new ANTLRInputStream(eq);
         SurfaceLexer lexer = new SurfaceLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         SurfaceParser parser = new SurfaceParser(tokens);
-        ParseTree tree = parser.surface();
-
+        tree = parser.surface();
+        
         // reset our structures
         steps.clear();
         stack.clear();

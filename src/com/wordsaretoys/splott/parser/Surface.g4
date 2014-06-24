@@ -34,11 +34,12 @@ EQU : '=' ;
 //
 
 NUMBER
-    :   '-'? INT '.' INT EXP?   // 1.35, 1.35E-9, 0.3, -4.5
+    :   '-'? INT '.' FRA EXP?   // 1.35, 1.35E-9, 0.3, -4.5
     |   '-'? INT EXP            // 1e10 -3e4
     |   '-'? INT                // -3, 45
     ;
-fragment INT :   '0' | [1-9] [0-9]* ; // no leading zeros
-fragment EXP :   [Ee] [+\-]? INT ; // \- since - means "range" inside [...]
+fragment INT :	'0' | [1-9] [0-9]* ; // no leading zeros
+fragment FRA :	[0-9]+ ;			// leading zeros ok
+fragment EXP :	[Ee] [+\-]? INT ; // \- since - means "range" inside [...]
 
 WS  :   [ \t\n\r]+ -> skip ;

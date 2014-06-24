@@ -2,7 +2,10 @@ package com.wordsaretoys.splott;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +18,7 @@ import android.widget.TextView;
 public class EquationFragment extends Fragment {
 
 	// maps key buttons to generated key codes
-	int[][] keymap = {
+	static int[][] keymap = {
 		
 		{ R.id.key_0, KeyEvent.KEYCODE_0 },
 		{ R.id.key_1, KeyEvent.KEYCODE_1 },
@@ -52,12 +55,15 @@ public class EquationFragment extends Fragment {
 	};
 	
 	EditText source;
+	SyntaxChecker syntax;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state) {
 		View view = inflater.inflate(R.layout.equation_fragment, container, false);
 		
+		syntax = new SyntaxChecker();
 		source = (EditText) view.findViewById(R.id.source);
 		
+		// set up button dispatch to source editor
 		for (int i = 0; i < keymap.length; i++) {
 			final int[] keys = keymap[i];
 			// first field is the resource id of the key view
@@ -73,6 +79,20 @@ public class EquationFragment extends Fragment {
 			});
 		}
 		
+		// when source changes
+		source.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,	int after) {}
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				int errors = syntax.parse(s.toString());
+				source.setTextColor(errors > 0 ? Color.RED : Color.BLACK);
+				
+			}
+			@Override
+			public void afterTextChanged(Editable s) {}
+		});
+		
 		// prevents soft keyboard from popping up on click
 		// (while preserving ability to position/select cursor)
 		source.setOnClickListener(new OnClickListener() {
@@ -85,9 +105,5 @@ public class EquationFragment extends Fragment {
 		
 		return view;
 	}
-
-	/**
-	 * new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_xxx)
-	 * view.dispatchKeyEvent(event)
-	 */
+	
 }
