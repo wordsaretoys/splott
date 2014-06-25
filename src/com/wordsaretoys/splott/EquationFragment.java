@@ -1,6 +1,6 @@
 package com.wordsaretoys.splott;
 
-import com.wordsaretoys.splott.parser.SyntaxChecker;
+import java.lang.reflect.Method;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -16,6 +16,10 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.wordsaretoys.splott.parser.Compiler;
+import com.wordsaretoys.splott.parser.SyntaxChecker;
+
 
 public class EquationFragment extends Fragment {
 
@@ -58,11 +62,14 @@ public class EquationFragment extends Fragment {
 	
 	EditText source;
 	SyntaxChecker syntax;
+	Compiler compiler;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state) {
 		View view = inflater.inflate(R.layout.equation_fragment, container, false);
 		
 		syntax = new SyntaxChecker();
+		compiler = new Compiler(view.getContext());
+		
 		source = (EditText) view.findViewById(R.id.source);
 		
 		// set up button dispatch to source editor
@@ -87,9 +94,13 @@ public class EquationFragment extends Fragment {
 			public void beforeTextChanged(CharSequence s, int start, int count,	int after) {}
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				int errors = syntax.parse(s.toString());
+				String eq = s.toString();
+				int errors = syntax.parse(eq);
 				source.setTextColor(errors > 0 ? Color.RED : Color.BLACK);
-				
+				if (errors == 0) {
+					Method m = compiler.compile(eq);
+					Shared.surface.create(m);
+				}
 			}
 			@Override
 			public void afterTextChanged(Editable s) {}

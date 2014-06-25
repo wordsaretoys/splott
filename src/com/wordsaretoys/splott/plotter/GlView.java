@@ -43,7 +43,7 @@ public class GlView extends GLSurfaceView {
 		}
 		return gestureDetector.onTouchEvent(e) || super.onTouchEvent(e);
 	}
-
+	
 	/**
 	 * gesture detector listener
 	 */

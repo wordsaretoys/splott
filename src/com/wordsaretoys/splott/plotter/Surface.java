@@ -1,7 +1,7 @@
 package com.wordsaretoys.splott.plotter;
 
-import android.content.Context;
-import android.opengl.GLSurfaceView;
+import java.lang.reflect.Method;
+
 import android.util.Log;
 
 import com.wordsaretoys.rise.geometry.Camera;
@@ -19,17 +19,21 @@ public class Surface {
 	IndexBuffer index;
 	Mesh mesh;
 	Shader shader;
+	Method method;
+	GlView parent;
 
 	/**
 	 * ctor; creates GL objects
 	 * must be called in GL context
 	 */
-	public Surface(Context context) {
+	public Surface(GlView parent) {
+		
+		this.parent = parent;
 		
 		shader = new Shader();
 		shader.build(
-        	Asset.getTextAsset(context, "surfaceVert.glsl"),
-        	Asset.getTextAsset(context, "surfaceFrag.glsl")
+        	Asset.getTextAsset(parent.getContext(), "surfaceVert.glsl"),
+        	Asset.getTextAsset(parent.getContext(), "surfaceFrag.glsl")
         );
 
 		int[] attr = {
@@ -45,7 +49,9 @@ public class Surface {
 	/**
 	 * generate the mesh
 	 */
-	public void create(final GLSurfaceView parent) {
+	public void create(Method m) {
+		method = m;
+		
 		vertex.reset();
 		index.reset();
 		
@@ -84,7 +90,13 @@ public class Surface {
 
 		@Override
 		public float field(float x, float y, float z) {
-			return (float)(Math.sin(x * Math.sin(y * Math.sin(z))));
+			double f = 0;
+			try {
+				f = (double) method.invoke(null, x, y, z, 0);
+			} catch (Exception e) {
+				// shouldn't ever happen
+			}
+			return (float)(f);
 		}
 
 		@Override
