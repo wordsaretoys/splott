@@ -7,5 +7,6 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry exported="true" kind="lib" path="/home/chris/apps/antlr/antlr-4.2.2-complete.jar"/>
 	<classpathentry exported="true" kind="lib" path="/home/chris/apps/dexmaker/dexmaker-1.0.jar"/>
+	<classpathentry kind="src" path="rise"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

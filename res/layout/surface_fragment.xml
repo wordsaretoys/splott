@@ -4,5 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
+    <com.wordsaretoys.splott.plotter.GlView
+        android:id="@+id/glView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

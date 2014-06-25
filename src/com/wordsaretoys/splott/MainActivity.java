@@ -78,9 +78,15 @@ public class MainActivity extends Activity {
 			}
 		);
 		getActionBar().addTab(surfaceTab);
-		
+
 		getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		getActionBar().setSelectedNavigationItem(selectedTab);
+		
+		getFragmentManager().beginTransaction()
+			.show(equationFragment)
+			.hide(limitsFragment)
+			.hide(surfaceFragment)
+			.commit();
 	}
 
 	@Override
