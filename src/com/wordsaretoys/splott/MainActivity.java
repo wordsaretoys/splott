@@ -8,7 +8,6 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 
 public class MainActivity extends Activity {
-
 	
 	EquationFragment equationFragment;
 	LimitsFragment limitsFragment;

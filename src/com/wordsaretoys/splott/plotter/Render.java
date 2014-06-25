@@ -49,11 +49,12 @@ public class Render implements GLSurfaceView.Renderer {
 		GLES20.glClearDepthf(1.0f);
 		GLES20.glDepthFunc(GLES20.GL_LEQUAL);
 		GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-		GLES20.glClearColor(0.75f, 0.75f, 0.75f, 1);
+		GLES20.glClearColor(1f, 0.8f, 0.8f, 1);
 		GLES20.glDisable(GLES20.GL_BLEND);
 		GLES20.glDisable(GLES20.GL_CULL_FACE);
 		
 		surface = new Surface(parent.getContext());
+		surface.create(parent);
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package com.wordsaretoys.splott;
+package com.wordsaretoys.splott.parser;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -21,9 +21,6 @@ import com.google.dexmaker.Local;
 import com.google.dexmaker.MethodId;
 import com.google.dexmaker.TypeId;
 import com.google.dexmaker.UnaryOp;
-import com.wordsaretoys.splott.parser.SurfaceBaseListener;
-import com.wordsaretoys.splott.parser.SurfaceLexer;
-import com.wordsaretoys.splott.parser.SurfaceParser;
 
 /**
  * compiles surface equation to f(x, y, z, t) function

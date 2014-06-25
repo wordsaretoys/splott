@@ -1,4 +1,4 @@
-package com.wordsaretoys.splott;
+package com.wordsaretoys.splott.parser;
 
 import java.util.BitSet;
 
@@ -14,8 +14,6 @@ import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.misc.Nullable;
 
 import com.google.dexmaker.DexMaker;
-import com.wordsaretoys.splott.parser.SurfaceLexer;
-import com.wordsaretoys.splott.parser.SurfaceParser;
 
 /**
  * attempts to parse equation

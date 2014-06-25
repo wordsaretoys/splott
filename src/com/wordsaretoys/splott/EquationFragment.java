@@ -1,5 +1,7 @@
 package com.wordsaretoys.splott;
 
+import com.wordsaretoys.splott.parser.SyntaxChecker;
+
 import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Color;
