@@ -13,15 +13,12 @@ import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.misc.Nullable;
 
-import com.google.dexmaker.DexMaker;
-
 /**
  * attempts to parse equation
  * and returns error state
  */
 public class SyntaxChecker {
 
-	DexMaker dexMaker = new DexMaker();
 	int errors;
 
 	public int parse(String eq) {

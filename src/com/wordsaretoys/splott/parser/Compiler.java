@@ -9,8 +9,6 @@ import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import android.content.Context;
-
 /**
  * compiles surface equation to f(x, y, z, t) function
  * note that function is assumed to be syntax-checked!
@@ -246,12 +244,9 @@ public class Compiler {
 	int local;
 	int output;
 	
-	Context context;
-
-	public Compiler(Context c) {
+	public Compiler() {
         steps = new ArrayList<Step>();
         stack = new Stack<Integer>();
-        context = c;
 	}
 	
 	public Vm compile(String eq) {
