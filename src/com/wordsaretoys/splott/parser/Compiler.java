@@ -1,8 +1,5 @@
 package com.wordsaretoys.splott.parser;
 
-import java.io.File;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -13,14 +10,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import android.content.Context;
-
-import com.google.dexmaker.BinaryOp;
-import com.google.dexmaker.Code;
-import com.google.dexmaker.DexMaker;
-import com.google.dexmaker.Local;
-import com.google.dexmaker.MethodId;
-import com.google.dexmaker.TypeId;
-import com.google.dexmaker.UnaryOp;
 
 /**
  * compiles surface equation to f(x, y, z, t) function
@@ -181,7 +170,77 @@ public class Compiler {
 		
 	}
 
-	DexMaker dexMaker = new DexMaker();
+	public static class Vm {
+		
+		double[] locals;
+		Step[] steps;
+		int output;
+		
+		public Vm(Step[] s, int lc, int o) {
+			steps = s;
+			locals = new double[lc];
+			output = o;
+		}
+		
+		public double get(double x, double y, double z, double t) {
+			locals[0] = x;
+			locals[1] = y;
+			locals[2] = z;
+			locals[3] = t;
+			for (int i = 0; i < steps.length; i++) {
+				Step step = steps[i];
+				switch (step.type) {
+
+				case LoadConstant:
+					locals[step.local0] = step.constant;
+					break;
+					
+				case OpAdd:
+					locals[step.local2] = locals[step.local0] + locals[step.local1];
+					break;
+					
+				case OpSubtract:
+					locals[step.local2] = locals[step.local0] - locals[step.local1];
+					break;
+
+				case OpMultiply:
+					locals[step.local2] = locals[step.local0] * locals[step.local1];
+					break;
+
+				case OpDivide:
+					locals[step.local2] = locals[step.local0] / locals[step.local1];
+					break;
+
+				case OpExponent:
+					locals[step.local2] = Math.pow(locals[step.local0], locals[step.local1]);
+					break;
+					
+				case OpUminus:
+					locals[step.local1] = -locals[step.local0];
+					break;
+					
+				case FuncSine:
+					locals[step.local1] = Math.sin(locals[step.local0]);
+					break;
+				
+				case FuncCosine:
+					locals[step.local1] = Math.cos(locals[step.local0]);
+					break;
+
+				case FuncLogarithm:
+					locals[step.local1] = Math.log(locals[step.local0]);
+					break;
+					
+				case FuncExponential:
+					locals[step.local1] = Math.exp(locals[step.local0]);
+					break;
+				}
+			}
+			return locals[output];
+		}
+		
+	}
+	
 	ArrayList<Step> steps;
 	Stack<Integer> stack;
 	int local;
@@ -193,17 +252,9 @@ public class Compiler {
         steps = new ArrayList<Step>();
         stack = new Stack<Integer>();
         context = c;
-        
-        // TODO: clean out jar files??
 	}
 	
-	public Method compile(String eq) {
-		parse(eq);
-		//debug();
-		return translate();
-	}
-	
-	void parse(String eq) {
+	public Vm compile(String eq) {
         // generate the parse tree
 		ParseTree tree = null;
         ANTLRInputStream input = new ANTLRInputStream(eq);
@@ -211,19 +262,19 @@ public class Compiler {
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         SurfaceParser parser = new SurfaceParser(tokens);
         tree = parser.surface();
-        
         // reset our structures
         steps.clear();
         stack.clear();
         local = VarT + 1;
-
         // walking the parse tree generates the steps
         ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(new Listener(), tree);
         // the return index is the last thing on the stack
         output = stack.pop();
+		//debug();
+		return new Vm(steps.toArray(new Step[0]), local, output);
 	}
-
+	
 	void debug() {
         for (int i = 0; i < steps.size(); i++) {
         	Step s = steps.get(i);
@@ -247,122 +298,6 @@ public class Compiler {
         	}
         }
         System.out.println("RET " + output);
-	}
-	
-	Method translate() {
-		dexMaker = new DexMaker();
-		// identify and declare a containing class
-		TypeId<?> surfaceEq = TypeId.get("LSurfaceEq;");
-		dexMaker.declare(surfaceEq, "SurfaceEq.generated", Modifier.PUBLIC, TypeId.OBJECT);
-		
-		// lookup system types we may need
-		TypeId<Math> mathType = TypeId.get(Math.class);
-		
-		// identify and declare a surface equation method
-		// it has the form: public static double get(double, double, double, double);
-		@SuppressWarnings("rawtypes")
-		MethodId get = surfaceEq.getMethod(TypeId.DOUBLE, "get", 
-				TypeId.DOUBLE, TypeId.DOUBLE, TypeId.DOUBLE, TypeId.DOUBLE);
-		Code code = dexMaker.declare(get, Modifier.STATIC | Modifier.PUBLIC);
-		
-		// allocate and declare all the locals we'll need
-		ArrayList<Local<Double>> l = new ArrayList<Local<Double>>();
-		// first four are the (x, y, z, t) parameters
-		for (int i = 0; i < 4; i++) {
-			l.add(code.getParameter(i, TypeId.DOUBLE));
-		}
-		// remainder are scratch vars
-		for (int i = 4; i < local; i++) {
-			l.add(code.newLocal(TypeId.DOUBLE));
-		}
-		
-		// run through the steps and generate code
-		for (int i = 0; i < steps.size(); i++) {
-			
-			Step step = steps.get(i);
-			switch (step.type) {
-
-			case LoadConstant:
-				
-				code.loadConstant(l.get(step.local0), step.constant);
-				break;
-				
-			case OpAdd:
-				
-				code.op(BinaryOp.ADD, l.get(step.local2), 
-						l.get(step.local0), l.get(step.local1));
-				break;
-				
-			case OpSubtract:
-				
-				code.op(BinaryOp.SUBTRACT, l.get(step.local2), 
-						l.get(step.local0), l.get(step.local1));
-				break;
-
-			case OpMultiply:
-				
-				code.op(BinaryOp.MULTIPLY, l.get(step.local2), 
-						l.get(step.local0), l.get(step.local1));
-				break;
-
-			case OpDivide:
-				
-				code.op(BinaryOp.DIVIDE, l.get(step.local2), 
-						l.get(step.local0), l.get(step.local1));
-				break;
-
-			case OpExponent:
-
-				MethodId<Math, Double> pow = 
-					mathType.getMethod(TypeId.DOUBLE, "pow", TypeId.DOUBLE, TypeId.DOUBLE);
-				code.invokeStatic(pow, l.get(step.local2), l.get(step.local0), l.get(step.local1));
-				break;
-				
-			case OpUminus:
-				
-				code.op(UnaryOp.NEGATE, l.get(step.local1), l.get(step.local0));
-				break;
-				
-			case FuncSine:
-				
-				MethodId<Math, Double> sin = mathType.getMethod(TypeId.DOUBLE, "sin", TypeId.DOUBLE);
-				code.invokeStatic(sin, l.get(step.local1), l.get(step.local0));
-				break;
-			
-			case FuncCosine:
-				
-				MethodId<Math, Double> cos = mathType.getMethod(TypeId.DOUBLE, "cos", TypeId.DOUBLE);
-				code.invokeStatic(cos, l.get(step.local1), l.get(step.local0));
-				break;
-
-			case FuncLogarithm:
-
-				MethodId<Math, Double> log = mathType.getMethod(TypeId.DOUBLE, "log", TypeId.DOUBLE);
-				code.invokeStatic(log, l.get(step.local1), l.get(step.local0));
-				break;
-				
-			case FuncExponential:
-				
-				MethodId<Math, Double> exp = mathType.getMethod(TypeId.DOUBLE, "exp", TypeId.DOUBLE);
-				code.invokeStatic(exp, l.get(step.local1), l.get(step.local0));
-				break;
-			}
-		}
-		
-		// return the last value
-		code.returnValue(l.get(output));
-
-		// create the dex file and load it
-		try {
-			File outputDir = context.getCacheDir();
-			ClassLoader loader = dexMaker.generateAndLoad(Compiler.class.getClassLoader(), outputDir);
-			Class<?> surfaceEqClass = loader.loadClass("SurfaceEq");
-			// return the method on success
-			return surfaceEqClass.getMethod("get", double.class, double.class, double.class, double.class);
-		} catch(Exception e) {
-			e.printStackTrace();
-			return null;
-		}
 	}
 	
 }

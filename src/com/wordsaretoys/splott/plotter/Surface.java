@@ -1,7 +1,5 @@
 package com.wordsaretoys.splott.plotter;
 
-import java.lang.reflect.Method;
-
 import android.util.Log;
 
 import com.wordsaretoys.rise.geometry.Camera;
@@ -12,6 +10,7 @@ import com.wordsaretoys.rise.meshutil.IndexBuffer;
 import com.wordsaretoys.rise.meshutil.SurfaceMapper;
 import com.wordsaretoys.rise.meshutil.VertexBuffer;
 import com.wordsaretoys.rise.utility.Asset;
+import com.wordsaretoys.splott.parser.Compiler.Vm;
 
 public class Surface {
 
@@ -19,7 +18,7 @@ public class Surface {
 	IndexBuffer index;
 	Mesh mesh;
 	Shader shader;
-	Method method;
+	Vm vm;
 	GlView parent;
 
 	/**
@@ -49,8 +48,8 @@ public class Surface {
 	/**
 	 * generate the mesh
 	 */
-	public void create(Method m) {
-		method = m;
+	public void create(Vm vm) {
+		this.vm = vm;
 		
 		vertex.reset();
 		index.reset();
@@ -90,13 +89,7 @@ public class Surface {
 
 		@Override
 		public float field(float x, float y, float z) {
-			double f = 0;
-			try {
-				f = (double) method.invoke(null, x, y, z, 0);
-			} catch (Exception e) {
-				// shouldn't ever happen
-			}
-			return (float)(f);
+			return (float) vm.get(x, y, z, 0);
 		}
 
 		@Override

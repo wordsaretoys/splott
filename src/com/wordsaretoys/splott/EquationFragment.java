@@ -1,7 +1,5 @@
 package com.wordsaretoys.splott;
 
-import java.lang.reflect.Method;
-
 import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Color;
@@ -18,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.wordsaretoys.splott.parser.Compiler;
+import com.wordsaretoys.splott.parser.Compiler.Vm;
 import com.wordsaretoys.splott.parser.SyntaxChecker;
 
 
@@ -98,8 +97,8 @@ public class EquationFragment extends Fragment {
 				int errors = syntax.parse(eq);
 				source.setTextColor(errors > 0 ? Color.RED : Color.BLACK);
 				if (errors == 0) {
-					Method m = compiler.compile(eq);
-					Shared.surface.create(m);
+					Vm vm = compiler.compile(eq);
+					Shared.surface.create(vm);
 				}
 			}
 			@Override
