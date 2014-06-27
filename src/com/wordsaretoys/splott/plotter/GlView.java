@@ -32,15 +32,6 @@ public class GlView extends GLSurfaceView {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent e) {
-		// handle raw events for movement
-		switch (e.getActionMasked()) {
-		case MotionEvent.ACTION_DOWN:
-			render.setMove(true);
-			break;
-		case MotionEvent.ACTION_UP:
-			render.setMove(false);
-			break;
-		}
 		return gestureDetector.onTouchEvent(e) || super.onTouchEvent(e);
 	}
 	

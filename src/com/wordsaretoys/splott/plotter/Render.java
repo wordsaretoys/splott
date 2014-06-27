@@ -23,9 +23,8 @@ public class Render implements GLSurfaceView.Renderer {
 	// player eye-line camera
 	public Camera camera;
 	
-	// looking and moving state
+	// looking state
 	Vector looking = new Vector();
-	boolean moving;
 
 	// timer interval
 	Interval interval = new Interval();
@@ -73,20 +72,10 @@ public class Render implements GLSurfaceView.Renderer {
 		looking.set(-0.5f * dy, -0.5f * dx, 0);
 	}
 	
-	public void setMove(boolean on) {
-		moving = on;
-	}
-
 	public void updateCamera() {
 		float dt = interval.next();
-		// rotate camera (with roll stabilization)
-		camera.turn(0.25f * looking.x * dt, 0.25f * looking.y * dt, 10 * camera.right.y * dt);
+		// rotate camera
+		camera.turn(0.25f * looking.x * dt, 0.25f * looking.y * dt, 0);
 		looking.mul(0.9f);
-		// move camera if thrusting
-		direction.copy(camera.front).mul(moving ? 1 : 0);
-		// determine new velocity and position
-		direction.mul(dt);
-		velocity.add(direction).mul(0.99f);
-		camera.move(velocity.x * dt, velocity.y * dt, velocity.z * dt);
 	}
 }

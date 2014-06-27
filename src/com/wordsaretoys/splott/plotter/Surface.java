@@ -77,7 +77,7 @@ public class Surface {
 	 */
 	public void draw(Camera camera) {
 		shader.activate();
-		shader.setMatrix("modelview", camera.modelview);
+		shader.setMatrix("modelview", camera.rotations);
 		shader.setMatrix("projector", camera.projector);
 		mesh.draw();
 	}
