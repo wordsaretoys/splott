@@ -7,8 +7,11 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,6 +19,7 @@ import android.widget.TextView;
 import com.wordsaretoys.splott.parser.Compiler;
 import com.wordsaretoys.splott.parser.SyntaxChecker;
 import com.wordsaretoys.splott.parser.Vm;
+import com.wordsaretoys.splott.plotter.GlView;
 
 public class MainActivity extends Activity {
 
@@ -56,7 +60,9 @@ public class MainActivity extends Activity {
 		
 	};
 
+	GlView glView;
 	EditText source;
+	ViewGroup keys;
 	SyntaxChecker syntax;
 	Compiler compiler;
 	
@@ -65,11 +71,12 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		// TODO: rotation will lose vm state??
 		syntax = new SyntaxChecker();
 		compiler = new Compiler();
 		
 		source = (EditText) findViewById(R.id.source);
+		glView = (GlView) findViewById(R.id.glView);
+		keys = (ViewGroup) findViewById(R.id.keys);
 		
 		// when source changes
 		source.addTextChangedListener(new TextWatcher() {
@@ -105,15 +112,27 @@ public class MainActivity extends Activity {
 			});
 		}
 		
-		// prevents soft keyboard from popping up on click
-		// (while preserving ability to position/select cursor)
 		final InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		source.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				// prevents soft keyboard from popping up on click
+				// (while preserving ability to position/select cursor)
 				im.hideSoftInputFromWindow(source.getWindowToken(), 0);
+				// insure our custom keyboard is shown
+				keys.setVisibility(View.VISIBLE);
 			}
 		});
+		
+		glView.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				// hide the custom keyboard
+				keys.setVisibility(View.GONE);
+				return false;
+			}
+		});
+		
 	}
 
 	@Override
