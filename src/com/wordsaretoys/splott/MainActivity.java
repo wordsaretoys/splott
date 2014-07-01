@@ -14,8 +14,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.wordsaretoys.splott.parser.Compiler;
-import com.wordsaretoys.splott.parser.Compiler.Vm;
 import com.wordsaretoys.splott.parser.SyntaxChecker;
+import com.wordsaretoys.splott.parser.Vm;
 
 public class MainActivity extends Activity {
 

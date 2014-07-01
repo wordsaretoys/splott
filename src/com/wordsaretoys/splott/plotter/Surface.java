@@ -1,7 +1,5 @@
 package com.wordsaretoys.splott.plotter;
 
-import android.util.Log;
-
 import com.wordsaretoys.rise.geometry.Camera;
 import com.wordsaretoys.rise.geometry.Vector;
 import com.wordsaretoys.rise.glwrapper.Mesh;
@@ -10,7 +8,7 @@ import com.wordsaretoys.rise.meshutil.IndexBuffer;
 import com.wordsaretoys.rise.meshutil.SurfaceMapper;
 import com.wordsaretoys.rise.meshutil.VertexBuffer;
 import com.wordsaretoys.rise.utility.Asset;
-import com.wordsaretoys.splott.parser.Compiler.Vm;
+import com.wordsaretoys.splott.parser.Vm;
 
 public class Surface {
 
@@ -39,7 +37,6 @@ public class Surface {
 			shader.getAttributeId("position"), 3
 		};
 		mesh = new Mesh(attr);
-//		mesh.drawPrimitive = GLES20.GL_POINTS;
 			
 		vertex = new VertexBuffer();
 		index = new IndexBuffer();
@@ -60,9 +57,7 @@ public class Surface {
 				new Mapper().generate(-5, -5, -5, 5, 5, 5, 0.25f, 0);
 				parent.queueEvent(new Runnable() {
 					@Override public void run() {
-//						mesh.build(vertex, index);
 						mesh.build(vertex);
-						Log.d("debris", "built " + vertex.length / mesh.stride + " vertices");
 					}
 				});
 				
