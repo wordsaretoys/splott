@@ -20,6 +20,7 @@ import com.wordsaretoys.splott.parser.Compiler;
 import com.wordsaretoys.splott.parser.SyntaxChecker;
 import com.wordsaretoys.splott.parser.Vm;
 import com.wordsaretoys.splott.plotter.GlView;
+import com.wordsaretoys.splott.plotter.Render;
 
 public class MainActivity extends Activity {
 
@@ -89,7 +90,7 @@ public class MainActivity extends Activity {
 				source.setTextColor(errors > 0 ? Color.RED : Color.BLACK);
 				if (errors == 0) {
 					Vm vm = compiler.compile(eq);
-					Shared.surface.create(vm);
+					Render.surface.create(vm);
 				}
 			}
 			@Override

@@ -9,7 +9,6 @@ import android.opengl.GLSurfaceView;
 import com.wordsaretoys.rise.geometry.Camera;
 import com.wordsaretoys.rise.geometry.Vector;
 import com.wordsaretoys.rise.utility.Interval;
-import com.wordsaretoys.splott.Shared;
 
 /**
  * rendering object for gl surface
@@ -17,8 +16,9 @@ import com.wordsaretoys.splott.Shared;
  */
 public class Render implements GLSurfaceView.Renderer {
 
-	// model objects
-	Surface surface;
+	// surface model object
+	// made static for cheap access from activity
+	public static Surface surface;
 	
 	// player eye-line camera
 	public Camera camera;
@@ -53,7 +53,7 @@ public class Render implements GLSurfaceView.Renderer {
 		GLES20.glDisable(GLES20.GL_BLEND);
 		GLES20.glDisable(GLES20.GL_CULL_FACE);
 		
-		Shared.surface = surface = new Surface(parent);
+		surface = new Surface(parent);
 	}
 
 	@Override
